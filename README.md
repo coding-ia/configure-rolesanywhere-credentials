@@ -10,7 +10,7 @@ This is the minimal setup required to use the action:
 
 ```
 - name: AWS Roles Anywhere action
-  uses: coding-ia/configure-rolesanywhere-credentials@dev
+  uses: coding-ia/configure-rolesanywhere-credentials@main
   with:
     aws-region: us-east-1
     private-key: ${{ secrets.PRIVATE_KEY }}
