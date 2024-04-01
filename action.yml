@@ -8,7 +8,7 @@ runs:
 inputs:
   aws-region:
     description: AWS Region, e.g. us-east-2
-    required: false
+    required: true
   private-key:
     description: Private key
     required: true

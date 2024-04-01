@@ -13,6 +13,7 @@ func CreateCredentials() {
 
 	privateKeyContent := actions.GetInput("private-key")
 	certificateContent := actions.GetInput("certificate")
+	region := actions.GetInput("aws-region")
 	roleArn := actions.GetInput("role-arn")
 	profileArn := actions.GetInput("profile-arn")
 	trustAnchorArn := actions.GetInput("trust-anchor-arn")
@@ -41,6 +42,7 @@ func CreateCredentials() {
 		ProfileArnStr:     profileArn,
 		TrustAnchorArnStr: trustAnchorArn,
 		SessionDuration:   sessionDuration,
+		Region:            region,
 	}
 
 	signer, signingAlgorithm, err := helper.GetSigner(&credentialsOptions)
@@ -66,6 +68,9 @@ func CreateCredentials() {
 	actions.AddMask(credentialProcessOutput.SessionToken)
 	actions.SetEnv("AWS_SESSION_TOKEN", credentialProcessOutput.SessionToken)
 	actions.SetOutput("aws-session-token", credentialProcessOutput.SessionToken)
+
+	actions.SetEnv("AWS_DEFAULT_REGION", region)
+	actions.SetEnv("AWS_REGION", region)
 }
 
 func writeToFile(content, fileName string) (string, error) {
