@@ -3,7 +3,7 @@ description: Configures AWS credentials using Roles Anywhere for use in subseque
 
 runs:
   using: docker
-  image: docker://public.ecr.aws/q9b0o0z5/configure-rolesanywhere-credentials:latest
+  image: docker://ghcr.io/coding-ia/configure-rolesanywhere-credentials:main
   
 inputs:
   aws-region:
