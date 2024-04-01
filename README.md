@@ -2,7 +2,7 @@
 
 This action allows you to use Roles Anywhere for getting credentials for an AWS account.
 
-Before using this action, you will need to setup IAM Roles Anywhere, and setup the proper certificates and roles.
+Before using this action, you will need to [setup](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/getting-started.html) IAM Roles Anywhere, and setup the proper certificates and roles.
 
 # Using the action
 
