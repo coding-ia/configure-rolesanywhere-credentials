@@ -18,10 +18,9 @@ RUN go build \
   && strip /bin/ra_action \
   && upx -q -9 /bin/ra_action
 
-#FROM alpine:latest
 FROM scratch
 
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /bin/ra_action /ra_action
 
 ENTRYPOINT ["/ra_action"]
-
