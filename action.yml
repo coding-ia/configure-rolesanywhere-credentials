@@ -1,0 +1,36 @@
+name: '"Configure Roles Anywhere Credentials" Action for GitHub Actions'
+description: Configures AWS credentials using Roles Anywhere for use in subsequent steps in a GitHub Action workflow
+
+runs:
+  using: docker
+  image: docker://public.ecr.aws/q9b0o0z5/configure-rolesanywhere-credentials:latest
+  
+inputs:
+  aws-region:
+    description: AWS Region, e.g. us-east-2
+    required: true
+  private-key:
+    description: Private key
+    required: true
+  certificate:
+    description: Certificate
+    required: true
+  role-arn:
+    description: Role ARN
+    required: true
+  profile-arn:
+    description: Profile ARN
+    required: true
+  trust-anchor-arn:
+    description: Trust Anchor ARN
+    required: true
+  session-duration:
+    description: Session Duration
+    required: false
+outputs:
+  aws-access-key-id:
+    description: The AWS access key ID for the provided credentials
+  aws-secret-access-key:
+    description: The AWS secret access key for the provided credentials
+  aws-session-token:
+    description: The AWS session token for the provided credentials
