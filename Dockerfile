@@ -5,25 +5,25 @@ ENV GO111MODULE=on \
   GOOS=linux \
   GOARCH=amd64
 
-RUN apt-get -qq update && \
-  apt-get -yqq install upx
+RUN apk update && apk upgrade
+RUN apk add upx gcc musl-dev
 
 WORKDIR /src
 COPY . .
 
 RUN go build \
   -ldflags "-s -w -extldflags '-static'" \
-  -o /bin/app \
+  -o /bin/ra_action \
   . \
-  && strip /bin/app \
-  && upx -q -9 /bin/app
+  && strip /bin/ra_action \
+  && upx -q -9 /bin/ra_action
 
 RUN echo "nobody:x:65534:65534:Nobody:/:" > /etc_passwd
 
 FROM scratch
 
 COPY --from=builder /etc_passwd /etc/passwd
-COPY --from=builder --chown=65534:0 /bin/app /app
+COPY --from=builder --chown=65534:0 /bin/ra_action /ra_action
 
 USER nobody
-ENTRYPOINT ["/app"]
+ENTRYPOINT ["/ra_action"]
