@@ -18,12 +18,10 @@ RUN go build \
   && strip /bin/ra_action \
   && upx -q -9 /bin/ra_action
 
-RUN echo "nobody:x:65534:65534:Nobody:/:" > /etc_passwd
-
+#FROM alpine:latest
 FROM scratch
 
-COPY --from=builder /etc_passwd /etc/passwd
-COPY --from=builder --chown=65534:0 /bin/ra_action /ra_action
+COPY --from=builder /bin/ra_action /ra_action
 
-USER nobody
 ENTRYPOINT ["/ra_action"]
+

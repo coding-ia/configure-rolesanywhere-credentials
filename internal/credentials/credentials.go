@@ -75,10 +75,26 @@ func CreateCredentials() {
 
 func writeToFile(content, fileName string) (string, error) {
 	tempFilePath := filepath.Join(os.TempDir(), fileName)
-	err := os.WriteFile(tempFilePath, []byte(content), 0644)
+	err := createTempDirIfNotExist(os.TempDir())
+	if err != nil {
+		tempFilePath = fileName
+	}
+	err = os.WriteFile(tempFilePath, []byte(content), 0644)
 	if err != nil {
 		return "", err
 	}
 
 	return tempFilePath, nil
+}
+
+func createTempDirIfNotExist(dirPath string) error {
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		err := os.Mkdir(dirPath, 0700)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+	return nil
 }
