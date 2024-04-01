@@ -10,10 +10,11 @@ func TestCreateCredentials(t *testing.T) {
 `
 	certificate := `
 `
+
 	os.Setenv("INPUT_PRIVATE-KEY", privateKey)
 	os.Setenv("INPUT_CERTIFICATE", certificate)
 	os.Setenv("INPUT_ROLE-ARN", "arn:aws:iam::211125334931:role/TestRole")
-	os.Setenv("INPUT_PROFILE-ARN", "arn:aws:rolesanywhere:us-east-1:211125334931:profile/89afc4fd-7b96-443b-9613-10bd828d4c24")
+	os.Setenv("INPUT_PROFILE-ARN", "arn:aws:rolesanywhere:us-east-1:211125334931:profile/eef5f646-6218-4871-bf41-db7e13f7acad")
 	os.Setenv("INPUT_TRUST-ANCHOR-ARN", "arn:aws:rolesanywhere:us-east-1:211125334931:trust-anchor/6dd648ad-92a7-4a44-a59c-2b1d56dfbbee")
 
 	tempEnv, err := createTempGitHubEnviornment(".env")

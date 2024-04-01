@@ -1,10 +1,11 @@
 package credentials
 
 import (
+	"crypto/x509"
 	helper "github.com/aws/rolesanywhere-credential-helper/aws_signing_helper"
 	"github.com/sethvargo/go-githubactions"
+	"main/internal/util"
 	"os"
-	"path/filepath"
 	"strconv"
 )
 
@@ -24,20 +25,7 @@ func CreateCredentials() {
 		sessionDuration, _ = strconv.Atoi(sessionDurationOverride)
 	}
 
-	privateKeyFile, err := writeToFile(privateKeyContent, "private.key")
-	if err != nil {
-		actions.Errorf("Unable to process the private key.")
-		os.Exit(1)
-	}
-	certificateFile, err := writeToFile(certificateContent, "certificate.pem")
-	if err != nil {
-		actions.Errorf("Unable to process the certificate.")
-		os.Exit(1)
-	}
-
 	credentialsOptions := helper.CredentialsOpts{
-		PrivateKeyId:      privateKeyFile,
-		CertificateId:     certificateFile,
 		RoleArn:           roleArn,
 		ProfileArnStr:     profileArn,
 		TrustAnchorArnStr: trustAnchorArn,
@@ -45,7 +33,19 @@ func CreateCredentials() {
 		Region:            region,
 	}
 
-	signer, signingAlgorithm, err := helper.GetSigner(&credentialsOptions)
+	privateKey, err := util.GetPrivateKeyFromPEMString([]byte(privateKeyContent))
+	if err != nil {
+		actions.Errorf("%s", err)
+		os.Exit(1)
+	}
+	certificate, err := util.GetCertificateFromPEM([]byte(certificateContent))
+	if err != nil {
+		actions.Errorf("%s", err)
+		os.Exit(1)
+	}
+	var certificateChain []*x509.Certificate
+
+	signer, signingAlgorithm, err := helper.GetFileSystemSigner(privateKey, certificate, certificateChain)
 	if err != nil {
 		actions.Errorf("%s", err)
 		os.Exit(1)
@@ -71,30 +71,4 @@ func CreateCredentials() {
 
 	actions.SetEnv("AWS_DEFAULT_REGION", region)
 	actions.SetEnv("AWS_REGION", region)
-}
-
-func writeToFile(content, fileName string) (string, error) {
-	tempFilePath := filepath.Join(os.TempDir(), fileName)
-	err := createTempDirIfNotExist(os.TempDir())
-	if err != nil {
-		tempFilePath = fileName
-	}
-	err = os.WriteFile(tempFilePath, []byte(content), 0644)
-	if err != nil {
-		return "", err
-	}
-
-	return tempFilePath, nil
-}
-
-func createTempDirIfNotExist(dirPath string) error {
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		err := os.Mkdir(dirPath, 0700)
-		if err != nil {
-			return err
-		}
-	} else if err != nil {
-		return err
-	}
-	return nil
 }
