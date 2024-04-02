@@ -27,6 +27,16 @@ inputs:
   session-duration:
     description: Session Duration
     required: false
+  endpoint:
+    description: Service Endpoint
+    required: false
+  no-verify-ssl:
+    description: No verify SSL
+    required: false
+  with-proxy:
+    description: Enable proxy
+    required: false
+    
 outputs:
   aws-access-key-id:
     description: The AWS access key ID for the provided credentials
