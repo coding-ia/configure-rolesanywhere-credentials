@@ -2,7 +2,7 @@ module main
 
 go 1.22.5
 
-toolchain go1.24.0
+toolchain go1.24.1
 
 require (
 	github.com/aws/rolesanywhere-credential-helper v1.4.0
